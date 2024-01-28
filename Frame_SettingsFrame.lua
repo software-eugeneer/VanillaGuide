@@ -326,11 +326,12 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 		return sldr
 	end
 	local function Render_SFTomTomSupportCheckBox(fParent, sName)
-		local checkbutton = CreateFrame("CheckButton", sName, fParent, "UICheckButtonTemplate")
-		checkbutton:SetWidth(20)
-		checkbutton:SetHeight(20)
-		getglobal(checkbutton:GetName() .. 'Text'):SetText("   TomTom Support")
-		
+		local chkbtn = CreateFrame("CheckButton", sName, fParent, "UICheckButtonTemplate")
+		chkbtn:SetWidth(20)
+		chkbtn:SetHeight(20)
+		chkbtn.tooltip = "Enable the TomTom arrow.";
+		getglobal(chkbtn:GetName() .. 'Text'):SetText("   TomTom Support")
+
 		if TomTom ~= nil then
 			checkbutton:Enable()
 		else
@@ -345,7 +346,7 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 		else
 			checkbutton:SetChecked(false)
 		end
-		return checkbutton
+		return chkbtn
 	end
 
 	obj.tWidgets = {}
@@ -364,6 +365,8 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 		--tWidgets.checkbutton_Minimap = Render_SFMinimapCheckBox(tWidgets.frame_SettingFrame, "VG_SettingsFrame_MinimapCheckButton")
 		--tWidgets.slider_Minimap = Render_SFSlider(tWidgets.frame_SettingFrame, "VG_SettingFrame_MinimapSlider", "Minimap Button Placement", "-180", "+180", -180, 180, math.floor(nMinimapPos), nil)
 		--tWidgets.slider_Minimap:SetPoint("TOP", tWidgets.frame_SettingFrame, "TOP", 0, -40)
+		obj.tWidgets.checkbutton_TomTomSupport = Render_SFTomTomSupportCheckBox(obj.tWidgets.frame_SettingsFrame, "VG_SettingsFrame_TomTomCheckButton")
+		obj.tWidgets.checkbutton_TomTomSupport:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingsFrame, "TOPLEFT", 8, -40)
 
 		obj.tWidgets.colorpicker_StepFrameTextColor = Render_SFColorSwatch(obj.tWidgets.frame_SettingFrame, "VG_MainFrame_StepFrameLabel", tUI)
 		obj.tWidgets.colorpicker_StepFrameTextColor:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingFrame, "TOPLEFT", 10, -45)
@@ -394,9 +397,6 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 		obj.tWidgets.slider_Layer = Render_SFSlider(obj.tWidgets.frame_SettingFrame, "VG_SettingsFrame_LayerSlider", "Layer", "BG", "DIALOG", 1, 5, Layers[sLayer], sLayer)
 		obj.tWidgets.slider_Layer:SetPoint("TOP", obj.tWidgets.frame_SettingFrame, "TOP", 0, -280)
 		obj.tWidgets.slider_Layer.fs:SetText(sLayer)
-
-		obj.tWidgets.checkbutton_TomTomSupport = Render_SFTomTomSupportCheckBox(obj.tWidgets.frame_SettingsFrame, "VG_SettingsFrame_TomTomCheckButton")
-		obj.tWidgets.checkbutton_TomTomSupport:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingsFrame, "TOPLEFT", 8, -40)
 	end
 
 	-------------------------------
