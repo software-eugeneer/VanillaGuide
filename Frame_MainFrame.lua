@@ -25,7 +25,9 @@ Description:
 			Diffentes modes, produces different behaviour, 
 			see the source for insight
     1.04.3
-	-- no changes in here for this revision
+		-- no changes in here for this revision
+	1.05.0
+		-- support for TomTom Vanilla
 ------------------------------------------------------
 Connection:
 --]]--------------------------------------------------
@@ -794,6 +796,28 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		end
 	end
 
+	local waypoint = nil
+	obj.RefreshTomTom = function(self)
+		if TomTom and oSettings:GetSettingsTomTom() then
+			local t = oDisplay:GetCurrentStepInfo()
+			if t.x and t.y and t.zone then
+				local zonetext = t.zone
+				if t.zone == "Stormwind City" or t.zone == "StormwindCity" then
+					zonetext = "Stormwind"
+				end
+				local continent, zone = TomTom:GetZoneInfo(TomTom:CleanZoneName(zonetext))
+				local options = { title = string.format("[VG] %s (step %d/%d)", oDisplay:GetGuideTitle(), oDisplay:GetCurrentStep(), oDisplay:GetCurrentStepCount()) }
+				if waypoint ~= nil then
+					TomTom:RemoveWaypoint(waypoint)
+				end
+				waypoint = TomTom:AddMFWaypoint(continent, zone, t.x/100, t.y/100, options )
+			else
+				TomTom:GoToNextWayPoint(waypoint)
+				waypoint = nil
+			end
+		end
+	end
+
 	obj.RefreshData = function(self)
 		obj:RefreshStepFrameLabel()
 		obj:RefreshStepNumberFrameLabel()
@@ -801,6 +825,7 @@ function objMainFrame:new(fParent, tTexture, oSettings, oDisplay)
 		obj:RefreshDropDownMenuLabel()
 		obj:RefreshScrollFrame()
 		obj:RefreshMetaMap()
+		obj:RefreshTomTom()
 	end
 
 	local function AddToDDM(nLevel, sType, sLabel, nID)

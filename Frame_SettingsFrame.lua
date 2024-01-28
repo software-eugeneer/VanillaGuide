@@ -20,7 +20,9 @@ Description:
 		-- One more setting for MetaMapNotes
 		(like the one for MetaMapBWP)
     1.04.3
-	-- no changes in here for this revision
+		-- no changes in here for this revision
+	1.05.0
+		-- support for TomTom Vanilla
 ------------------------------------------------------
 Connection:
 --]]--------------------------------------------------
@@ -41,6 +43,8 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
     local tUI = oSettings:GetSettingsUI()
     --local tMetaMapBWP = oSettings:GetSettingsMetaMapBWP()
     local tMetaMap = oSettings:GetSettingsMetaMap()
+
+	local bTomTomToggle = oSettings:GetSettingsTomTom()
 
    	local bMinimapToggle = tUI.MinimapToggle
 	local nMinimapPos = tUI.MinimapPos
@@ -321,6 +325,28 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 		sldr.fs = fs
 		return sldr
 	end
+	local function Render_SFTomTomSupportCheckBox(fParent, sName)
+		local checkbutton = CreateFrame("CheckButton", sName, fParent, "UICheckButtonTemplate")
+		checkbutton:SetWidth(20)
+		checkbutton:SetHeight(20)
+		getglobal(checkbutton:GetName() .. 'Text'):SetText("   TomTom Support")
+		
+		if TomTom ~= nil then
+			checkbutton:Enable()
+		else
+			checkbutton:Disable()
+		end
+		if checkbutton:IsEnabled() then
+			if bTomTomToggle then
+				checkbutton:SetChecked(true)
+			else
+				checkbutton:SetChecked(false)
+			end
+		else
+			checkbutton:SetChecked(false)
+		end
+		return checkbutton
+	end
 
 	obj.tWidgets = {}
 	-------------------------------
@@ -368,6 +394,9 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 		obj.tWidgets.slider_Layer = Render_SFSlider(obj.tWidgets.frame_SettingFrame, "VG_SettingsFrame_LayerSlider", "Layer", "BG", "DIALOG", 1, 5, Layers[sLayer], sLayer)
 		obj.tWidgets.slider_Layer:SetPoint("TOP", obj.tWidgets.frame_SettingFrame, "TOP", 0, -280)
 		obj.tWidgets.slider_Layer.fs:SetText(sLayer)
+
+		obj.tWidgets.checkbutton_TomTomSupport = Render_SFTomTomSupportCheckBox(obj.tWidgets.frame_SettingsFrame, "VG_SettingsFrame_TomTomCheckButton")
+		obj.tWidgets.checkbutton_TomTomSupport:SetPoint("TOPLEFT", obj.tWidgets.frame_SettingsFrame, "TOPLEFT", 8, -40)
 	end
 
 	-------------------------------
@@ -502,6 +531,12 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 		--this.fs:SetText(VGuide.db.char.UIoptions.Layer)
 		frame:SetFrameStrata(tUI.Layer)
 		this.fs:SetText(tUI.Layer)
+	end)
+
+	obj.tWidgets.checkbutton_TomTomSupport:SetScript("OnClick", function()
+		if arg1 == "LeftButton" then
+			oSettings:SetSettingsTomTom(this:GetChecked())
+		end
 	end)
 
 	-------------------------------

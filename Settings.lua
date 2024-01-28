@@ -23,7 +23,9 @@ Description:
 		-- Added a function for a proper MetaMap checking
 			MetaMapBWPSupportCheck()
     1.04.3
-	-- no changes in here for this revision
+		-- no changes in here for this revision
+	1.05.0
+		-- support for TomTom Vanilla
 ------------------------------------------------------
 Connection:
 --]]--------------------------------------------------
@@ -90,6 +92,7 @@ function objSettings:new()
 				nB = .59,
 				nA = .71,
 			},
+			TomTomToggle = true,
 		},
 	    CharInfo = {
 			CharName = "Unknown",	--CharName,
@@ -146,6 +149,9 @@ function objSettings:new()
 		Dv(" -  - Locked: " .. tostring(obj.db.char.UI.Locked))
 		Dv(" -  - MainFrameSize  X: " .. tostring(obj.db.char.UI.MainFrameSize.nWidth) .. "  Y: " .. tostring(obj.db.char.UI.MainFrameSize.nHeight))
 		Dv("---------------------------")
+		Dv(" -- TomTom")
+		Dv(" -  - Presence: " .. tostring(IsAddOnLoaded("TomTom")))
+		Dv(" -  - Enabled: " .. tostring(obj.db.char.TomTomToggle))
 	end
 
 	obj.CheckSettings = function(self)
@@ -251,6 +257,10 @@ function objSettings:new()
 		return obj.db.char
 	end
 
+	obj.GetSettingsTomTom = function(self)
+		return obj.db.char.TomTomToggle
+	end
+
 	obj.SetSettingsCharInfo = function(self, tCharInfo)
 		obj.db.char.CharInfo = tCharInfo
 	end
@@ -273,6 +283,10 @@ function objSettings:new()
 
 	obj.SetSettingEntireCharDB = function(self, tSettingsTable)
 		VGuide.Settings.db.char = tSettingsTable
+	end
+
+	obj.SetSettingsTomTom = function(self, bTomTom)
+		obj.db.char.TomTomToggle = bTomTom
 	end
 
 	return obj
