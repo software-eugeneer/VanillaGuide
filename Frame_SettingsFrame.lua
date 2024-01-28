@@ -333,18 +333,18 @@ function objSettingsFrame:new(fParent, tTexture, oSettings)
 		getglobal(chkbtn:GetName() .. 'Text'):SetText("   TomTom Support")
 
 		if TomTom ~= nil then
-			checkbutton:Enable()
+			chkbtn:Enable()
 		else
-			checkbutton:Disable()
+			chkbtn:Disable()
 		end
-		if checkbutton:IsEnabled() then
+		if chkbtn:IsEnabled() then
 			if bTomTomToggle then
-				checkbutton:SetChecked(true)
+				chkbtn:SetChecked(true)
 			else
-				checkbutton:SetChecked(false)
+				chkbtn:SetChecked(false)
 			end
 		else
-			checkbutton:SetChecked(false)
+			chkbtn:SetChecked(false)
 		end
 		return chkbtn
 	end
